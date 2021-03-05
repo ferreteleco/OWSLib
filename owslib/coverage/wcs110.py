@@ -142,7 +142,7 @@ class WebCoverageService_1_1_0(WCSBase):
     # TO DO: Handle rest of the  WCS 1.1.0 keyword parameters e.g. GridCRS etc.
     def getCoverage(self, identifier=None, bbox=None, time=None, format=None, store=False, rangesubset=None,
                     gridbaseCRS=None, gridtype=None, gridCS=None, gridorigin=None, gridoffsets=None,
-                    method='Get', timeout=30, **kwargs):
+                    method='Get', timeout=30, verifySSL=True, **kwargs):
         """Request and return a coverage from the WCS as a file-like object
         note: additional **kwargs helps with multi-version implementation
         core keyword arguments should be supported cross version
@@ -157,10 +157,10 @@ class WebCoverageService_1_1_0(WCSBase):
         if store = false, returns a multipart mime
         """
         if log.isEnabledFor(logging.DEBUG):
-            msg = 'WCS 1.1.0 DEBUG: Parameters passed to GetCoverage: identifier={}, bbox={}, time={}, format={}, rangesubset={}, gridbaseCRS={}, gridtype={}, gridCS={}, gridorigin={}, gridoffsets={}, method={}, other_arguments={}'  # noqa
+            msg = 'WCS 1.1.0 DEBUG: Parameters passed to GetCoverage: identifier={}, bbox={}, time={}, format={}, rangesubset={}, gridbaseCRS={}, gridtype={}, gridCS={}, gridorigin={}, gridoffsets={}, method={}, verifySSL={}, other_arguments={}'  # noqa
             log.debug(msg.format(
                 identifier, bbox, time, format, rangesubset, gridbaseCRS, gridtype, gridCS,
-                gridorigin, gridoffsets, method, str(kwargs)))
+                gridorigin, gridoffsets, method, verifySSL, str(kwargs)))
 
         if method == 'Get':
             method = self.ns.WCS_OWS('Get')
@@ -206,7 +206,7 @@ class WebCoverageService_1_1_0(WCSBase):
         # encode and request
         data = urlencode(request)
 
-        u = openURL(base_url, data, method, self.cookies, auth=self.auth, timeout=timeout, headers=self.headers)
+        u = openURL(base_url, data, method, self.cookies, auth=self.auth, timeout=timeout, headers=self.headers, verify=verifySSL)
         return u
 
     def getOperationByName(self, name):

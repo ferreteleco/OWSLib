@@ -132,6 +132,7 @@ class WebCoverageService_2_0_1(WCSBase):
         parameter=None,
         method="Get",
         timeout=30,
+        verifySSL=True,
         **kwargs
     ):
         """Request and return a coverage from the WCS as a file-like object
@@ -155,7 +156,7 @@ class WebCoverageService_2_0_1(WCSBase):
         """
         if log.isEnabledFor(logging.DEBUG):
             log.debug(
-                "WCS 2.0.1 DEBUG: Parameters passed to GetCoverage: identifier=%s, bbox=%s, time=%s, format=%s, crs=%s, width=%s, height=%s, resx=%s, resy=%s, resz=%s, parameter=%s, method=%s, other_arguments=%s"  # noqa
+                "WCS 2.0.1 DEBUG: Parameters passed to GetCoverage: identifier=%s, bbox=%s, time=%s, format=%s, crs=%s, width=%s, height=%s, resx=%s, resy=%s, resz=%s, parameter=%s, method=%s, timeout=%s, verifySSL=%s, other_arguments=%s"  # noqa
                 % (
                     identifier,
                     bbox,
@@ -169,6 +170,8 @@ class WebCoverageService_2_0_1(WCSBase):
                     resz,
                     parameter,
                     method,
+                    timeout,
+                    verifySSL,
                     str(kwargs),
                 )
             )
@@ -216,7 +219,7 @@ class WebCoverageService_2_0_1(WCSBase):
 
         log.debug("WCS 2.0.1 DEBUG: Second part of URL: %s" % data)
 
-        u = openURL(base_url, data, method, self.cookies, auth=self.auth, timeout=timeout, headers=self.headers)
+        u = openURL(base_url, data, method, self.cookies, auth=self.auth, timeout=timeout, headers=self.headers, verify=verifySSL)
         return u
 
     def getOperationByName(self, name):
